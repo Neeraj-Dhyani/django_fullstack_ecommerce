@@ -1,0 +1,18 @@
+<div class="card">
+  <a class="thumb" href="{{ p.get_absolute_url }}">
+    {% if p.image %}<img src="{{ p.image.url }}" alt="{{ p.name }}">{% else %}{{ p.category.emoji }}{% endif %}
+  </a>
+  <div class="body">
+    <h3><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></h3>
+    <div>
+      {% if p.is_organic %}<span class="badge">Organic</span>{% endif %}
+      {% if not p.in_stock %}<span class="badge out">Out of stock</span>{% endif %}
+    </div>
+    <div class="price">{{ CURRENCY }}{{ p.price|floatformat:"-2" }} <small>{{ p.get_unit_display }}</small></div>
+    <form method="post" action="{% url 'store:cart_add' p.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button class="btn btn-block" type="submit" {% if not p.in_stock %}disabled{% endif %}>Add to cart</button>
+    </form>
+  </div>
+</div>

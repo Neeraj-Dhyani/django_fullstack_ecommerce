@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}My orders — Veggimart{% endblock %}
+{% block content %}
+<h2 class="section">My orders</h2>
+{% for o in orders %}
+<div class="panel" style="margin-bottom:14px">
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <b>Order #{{ o.pk }}</b>
+    <span class="status">{{ o.get_status_display }}</span>
+    <span>{{ o.created_at|date:"d M Y, H:i" }}</span>
+    <b>{{ CURRENCY }}{{ o.total|floatformat:"-2" }}</b>
+  </div>
+  <ul>{% for i in o.items.all %}<li>{{ i.quantity }} × {{ i.product_name }}</li>{% endfor %}</ul>
+</div>
+{% empty %}
+<p class="empty">You haven't placed any orders yet.</p>
+{% endfor %}
+{% endblock %}

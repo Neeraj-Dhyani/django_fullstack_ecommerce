@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Log in — Veggimart{% endblock %}
+{% block content %}
+<form class="panel narrow" method="post">
+  {% csrf_token %}
+  <h2 style="margin-top:0">Log in</h2>
+  {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+  {% for field in form %}<div class="form-row"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{{ field.errors }}</div>{% endfor %}
+  <input type="hidden" name="next" value="{{ next }}">
+  <button class="btn btn-block" type="submit">Log in</button>
+  <p>New here? <a href="{% url 'store:signup' %}">Create an account</a></p>
+</form>
+{% endblock %}

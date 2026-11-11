@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Checkout — Veggimart{% endblock %}
+{% block content %}
+<h2 class="section">Checkout</h2>
+<div class="two-col">
+  <form class="panel" method="post">
+    {% csrf_token %}
+    <h3 style="margin-top:0">Delivery details</h3>
+    {% for field in form %}
+    <div class="form-row">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    </div>
+    {% endfor %}
+    <button class="btn btn-block" type="submit">Place order</button>
+  </form>
+  <div class="panel">
+    <h3 style="margin-top:0">Your items</h3>
+    <table class="tbl">
+      {% for row in items %}<tr><td>{{ row.quantity }} × {{ row.product.name }}</td><td>{{ CURRENCY }}{{ row.subtotal|floatformat:"-2" }}</td></tr>{% endfor %}
+    </table>
+    <div class="totals"><span>Total</span><span>{{ CURRENCY }}{{ total|floatformat:"-2" }}</span></div>
+  </div>
+</div>
+{% endblock %}

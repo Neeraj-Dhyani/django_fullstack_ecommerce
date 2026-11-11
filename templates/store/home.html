@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>Fresh from the farm to your kitchen</h1>
+  <p>Vegetables, fruits and herbs picked this morning and delivered today.</p>
+  <a class="btn" href="{% url 'store:products' %}">Start shopping</a>
+</section>
+
+<h2 class="section">Shop by category</h2>
+<div class="chips">
+  {% for c in categories %}<a class="chip" href="{% url 'store:category' c.slug %}">{{ c.emoji }} {{ c.name }}</a>{% endfor %}
+</div>
+
+<h2 class="section">Fresh arrivals</h2>
+{% if featured %}
+<div class="grid">{% for p in featured %}{% include "store/_product_card.html" %}{% endfor %}</div>
+{% else %}
+<p class="empty">No products yet. Run <code>python manage.py seed_veggies</code> or add some in the admin.</p>
+{% endif %}
+{% endblock %}

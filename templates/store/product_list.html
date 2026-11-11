@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{% if category %}{{ category.name }}{% else %}All products{% endif %} — Veggimart{% endblock %}
+{% block content %}
+<h2 class="section">{% if category %}{{ category.emoji }} {{ category.name }}{% elif q %}Results for “{{ q }}”{% else %}All products{% endif %}</h2>
+
+<form class="toolbar" method="get">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search…">
+  <label><input type="checkbox" name="organic" value="1" {% if organic %}checked{% endif %}> Organic only</label>
+  <select name="sort">
+    <option value="name" {% if sort == "name" %}selected{% endif %}>Name</option>
+    <option value="price_low" {% if sort == "price_low" %}selected{% endif %}>Price: low to high</option>
+    <option value="price_high" {% if sort == "price_high" %}selected{% endif %}>Price: high to low</option>
+  </select>
+  <button class="btn btn-light" type="submit">Apply</button>
+</form>
+
+{% if page.object_list %}
+<div class="grid">{% for p in page %}{% include "store/_product_card.html" %}{% endfor %}</div>
+<div class="pagination">
+  {% if page.has_previous %}<a class="btn btn-light" href="?page={{ page.previous_page_number }}&q={{ q }}&sort={{ sort }}{% if organic %}&organic=1{% endif %}">← Prev</a>{% endif %}
+  <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a class="btn btn-light" href="?page={{ page.next_page_number }}&q={{ q }}&sort={{ sort }}{% if organic %}&organic=1{% endif %}">Next →</a>{% endif %}
+</div>
+{% else %}
+<p class="empty">No products found.</p>
+{% endif %}
+{% endblock %}

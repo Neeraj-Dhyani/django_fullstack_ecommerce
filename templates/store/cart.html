@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Your cart — Veggimart{% endblock %}
+{% block content %}
+<h2 class="section">Your cart</h2>
+{% if items %}
+<div class="two-col">
+  <div class="panel">
+    <table class="tbl">
+      <tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+      {% for row in items %}
+      <tr>
+        <td><a href="{{ row.product.get_absolute_url }}">{{ row.product.category.emoji }} {{ row.product.name }}</a></td>
+        <td>{{ CURRENCY }}{{ row.product.price|floatformat:"-2" }}</td>
+        <td>
+          <form method="post" action="{% url 'store:cart_update' row.product.id %}">
+            {% csrf_token %}
+            <input class="qty" style="width:64px" type="number" name="quantity" value="{{ row.quantity }}" min="0" max="{{ row.product.stock }}">
+            <button class="linkbtn" type="submit">Update</button>
+          </form>
+        </td>
+        <td>{{ CURRENCY }}{{ row.subtotal|floatformat:"-2" }}</td>
+        <td><form method="post" action="{% url 'store:cart_remove' row.product.id %}">{% csrf_token %}<button class="linkbtn" type="submit">Remove</button></form></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="panel">
+    <h3 style="margin-top:0">Order summary</h3>
+    <div class="totals"><span>Total</span><span>{{ CURRENCY }}{{ total|floatformat:"-2" }}</span></div>
+    <p style="color:var(--muted);font-size:.9rem">Delivery is free. Pay on delivery.</p>
+    <a class="btn btn-block" href="{% url 'store:checkout' %}">Proceed to checkout</a>
+  </div>
+</div>
+{% else %}
+<div class="empty"><p>Your cart is empty.</p><a class="btn" href="{% url 'store:products' %}">Browse products</a></div>
+{% endif %}
+{% endblock %}

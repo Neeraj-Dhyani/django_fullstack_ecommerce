@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — Veggimart{% endblock %}
+{% block content %}
+<div class="detail">
+  <div class="big">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}{{ product.category.emoji }}{% endif %}</div>
+  <div>
+    <p><a href="{% url 'store:category' product.category.slug %}">← {{ product.category.name }}</a></p>
+    <h1>{{ product.name }}</h1>
+    <div>
+      {% if product.is_organic %}<span class="badge">Organic</span>{% endif %}
+      {% if product.in_stock %}<span class="badge">{{ product.stock }} in stock</span>{% else %}<span class="badge out">Out of stock</span>{% endif %}
+    </div>
+    <p class="price" style="font-size:1.6rem">{{ CURRENCY }}{{ product.price|floatformat:"-2" }} <small>{{ product.get_unit_display }}</small></p>
+    <p>{{ product.description|default:"Fresh and hand-picked." }}</p>
+    {% if product.in_stock %}
+    <form method="post" action="{% url 'store:cart_add' product.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{% url 'store:cart' %}">
+      <input class="qty" type="number" name="quantity" value="1" min="1" max="{{ product.stock }}">
+      <button class="btn" type="submit">Add to cart</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% if related %}
+<h2 class="section">You might also like</h2>
+<div class="grid">{% for p in related %}{% include "store/_product_card.html" %}{% endfor %}</div>
+{% endif %}
+{% endblock %}

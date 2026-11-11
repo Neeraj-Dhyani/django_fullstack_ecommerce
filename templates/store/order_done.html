@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Order placed — Veggimart{% endblock %}
+{% block content %}
+<div class="panel narrow" style="text-align:center;max-width:560px">
+  <div style="font-size:3rem">✅</div>
+  <h2>Thank you, {{ order.full_name }}!</h2>
+  <p>Your order <b>#{{ order.pk }}</b> has been placed. Total: <b>{{ CURRENCY }}{{ order.total|floatformat:"-2" }}</b> ({{ order.get_payment_method_display }}).</p>
+  <table class="tbl" style="text-align:left">
+    {% for i in order.items.all %}<tr><td>{{ i.quantity }} × {{ i.product_name }}</td><td>{{ CURRENCY }}{{ i.subtotal|floatformat:"-2" }}</td></tr>{% endfor %}
+  </table>
+  <p>We'll deliver to {{ order.address }}, {{ order.city }} – {{ order.pincode }}.</p>
+  <a class="btn" href="{% url 'store:products' %}">Keep shopping</a>
+</div>
+{% endblock %}
