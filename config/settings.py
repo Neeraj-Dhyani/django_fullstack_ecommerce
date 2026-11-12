@@ -35,7 +35,8 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-change-me")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
 
-ALLOWED_HOSTS = os.environ.get(".onrender.com", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.environ.get( "ALLOWED_HOSTS",
+    "localhost,127.0.0.1").split(",")
 
 
 # Application definition
